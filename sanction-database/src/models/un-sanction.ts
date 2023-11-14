@@ -3,23 +3,24 @@ import mongoose from "mongoose";
 // An interface that describes the properties
 // that are required to create a new User
 // this is for input field
-interface UNSanctionAttrs {
+export interface UNSanctionAttrs {
     type: string; // Individual or Corporate
     databaseId: string;
     firstName?: string;
     secondName?: string;
     thirdName?: string;
+    fourthName?: string;
     unListType?: string;
     unReferenceNumber?: string;
     listedOn?: Date;
     gender?: string;
-    originalName: string;
+    originalName?: string;
     description?: string; // COMMENTS1
-    title?: [string];
-    designation?: [string];
-    nationality?: [string];
+    title?: string[];
+    designation?: string[];
+    nationality?: string[];
     listType?: string;
-    lastUpdated?: [Date];
+    lastUpdated?: Date[];
     aliasName?: [{
         quality?: string;
         aliasName?: string;
@@ -55,8 +56,8 @@ interface UNSanctionAttrs {
         countryOfIssue?: string;
         note?: string;
     }]
-    unVersion: string;
-    unDataId: string;
+    unVersion?: string;
+    unDataId?: string;
 }
 
 // An interface that describes the properties
@@ -75,11 +76,12 @@ interface UNSanctionDoc extends mongoose.Document {
     firstName?: string;
     secondName?: string;
     thirdName?: string;
+    fourthName?: string;
     unListType?: string;
     unReferenceNumber?: string;
     listedOn?: Date;
     gender?: string;
-    originalName: string;
+    originalName?: string;
     description?: string; // COMMENTS1
     title?: [string];
     designation?: [string];
@@ -140,6 +142,9 @@ const unSanctionSchema = new mongoose.Schema(
             type: String
         },
         thirdName: {
+            type: String
+        },
+        fourthName: {
             type: String
         },
         unListType: {
