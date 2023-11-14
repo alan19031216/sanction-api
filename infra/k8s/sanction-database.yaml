@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sanction-database-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sanction-database
+  template:
+    metadata:
+      labels:
+        app: sanction-database
+    spec:
+      containers:
+        - name: sanction-database
+          image: alan1903/sanction-database
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://sanction-database-mongo-srv:27017/sanction-database'
+            - name: NAST_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: 'sanction-api'
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sanction-database-srv
+spec:
+  selector:
+    app: sanction-database
+  ports:
+    - name: sanction-database
+      protocol: TCP
+      port: 3000
+      targetPort: 3000

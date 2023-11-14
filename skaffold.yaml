@@ -1,0 +1,38 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/*
+build:
+  local:
+    push: false
+  # googleCloudBuild:
+  #   projectId: ticketing-dev-401523
+  artifacts:
+    - image: alan1903/user-auth
+      context: user-auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '/src/**/*.ts'
+            dest: .
+    - image: alan1903/admin-auth
+      context: admin-auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '/src/**/*.ts'
+            dest: .
+    - image: alan1903/sanction-database
+      context: sanction-database
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '/src/**/*.ts'
+            dest: .
+
+

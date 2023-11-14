@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-auth-mongo-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-auth-mongo
+  template:
+    metadata:
+      labels:
+        app: admin-auth-mongo
+    spec:
+      containers:
+        - name: admin-auth-mongo
+          # image: us.gcr.io/ticket-399112/admin-auth-mongo
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-auth-mongo-srv
+spec:
+  selector:
+    app: admin-auth-mongo
+  ports:
+    - name: db
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

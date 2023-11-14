@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-auth
+  template:
+    metadata:
+      labels:
+        app: admin-auth
+    spec:
+      containers:
+        - name: admin-auth
+          image: alan1903/admin-auth
+          env:
+            - name: MONGO_URI
+              value: 'mongodb://admin-auth-mongo-srv:27017/admin-auth'
+            - name: NAST_CLIENT_ID
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NATS_URL
+              value: 'http://nats-srv:4222'
+            - name: NATS_CLUSTER_ID
+              value: 'sanction-api'
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admin-auth-srv
+spec:
+  selector:
+    app: admin-auth
+  ports:
+    - name: admin-auth
+      protocol: TCP
+      port: 3000
+      targetPort: 3000
