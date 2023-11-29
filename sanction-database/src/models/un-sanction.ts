@@ -21,10 +21,12 @@ export interface UNSanctionAttrs {
     nationality?: string[];
     listType?: string;
     lastUpdated?: Date[];
-    aliasName?: [{
+    aliasName?: {
         quality?: string;
         aliasName?: string;
-    }];
+        note?: string;
+        dateOfBirth?: string;
+    }[];
     address?: {
         country?: string;
         street?: string;
@@ -91,6 +93,8 @@ interface UNSanctionDoc extends mongoose.Document {
     aliasName?: [{
         quality?: string;
         aliasName?: string;
+        note?: string;
+        dateOfBirth?: string;
     }];
     address?: {
         country?: string;
@@ -185,6 +189,12 @@ const unSanctionSchema = new mongoose.Schema(
                 type: String
             },
             aliasName: {
+                type: String
+            },
+            note: {
+                type: String
+            },
+            dateOfBirth: {
                 type: String
             },
         }],

@@ -8,7 +8,7 @@ import { validateRequest, BadRequestError, requireAuth, NotAuthorizedError, NotF
 import { Admin } from "../models/admin";
 import { SanctionDatabase } from "../models/sanction-database";
 import { UNSanctionAttrs } from "../models/un-sanction";
-import { extractDate, extractText } from "../utils/extractValue";
+import { extractAliasName, extractDate, extractText } from "../utils/extractValue";
 
 const router = express.Router();
 
@@ -50,6 +50,7 @@ router.post(
             let individualArrayJson = []
             for (const individual of xmlToJson.INDIVIDUALS.INDIVIDUAL) {
                 console.log(individual)
+
                 let sanction: UNSanctionAttrs = {
                     type: "Individual",
                     databaseId: sanctionDatabaseId
@@ -132,7 +133,7 @@ router.post(
                         sanction.designation = extractText(individual['DESIGNATION']['VALUE']);
                     }
                 }
-                
+
                 if (individual['NATIONALITY'] != null && individual['NATIONALITY'] != undefined) {
                     if (individual['NATIONALITY']['VALUE'] != null && individual['NATIONALITY']['VALUE'] != undefined) {
                         sanction.nationality = extractText(individual['NATIONALITY']['VALUE']);
@@ -151,6 +152,10 @@ router.post(
                     if (individual['LAST_DAY_UPDATED']['VALUE'] != null && individual['LAST_DAY_UPDATED']['VALUE'] != undefined) {
                         sanction.lastUpdated = extractDate(individual['LAST_DAY_UPDATED']['VALUE']);
                     }
+                }
+
+                if (individual['INDIVIDUAL_ALIAS'] != null && individual['INDIVIDUAL_ALIAS'] != undefined) {
+                    sanction.aliasName = extractAliasName(individual['INDIVIDUAL_ALIAS']);
                 }
 
                 individualArrayJson.push(sanction)
